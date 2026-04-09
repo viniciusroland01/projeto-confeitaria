@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Criar Conta - Fernanda Doces</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="{% url 'home' %}">🍰 Fernanda Doces</a>
+        </div>
+    </nav>
+
+    <main class="login-wrapper">
+        <div class="login-card">
+            <h1 class="logo-font">Criar Conta</h1>
+            <p class="subtitle">Cadastre-se para saborear nossas delícias!</p>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label>Usuário</label>
+                    <input type="text" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label>Senha</label>
+                    <input type="password" name="password" required>
+                </div>
+                <div class="input-group">
+                    <label>Confirmar Senha</label>
+                    <input type="password" name="password_confirm" required>
+                </div>
+                <button type="submit" class="btn-login">Finalizar Cadastro</button>
+            </form>
+
+            <div class="auth-footer">
+                <span>Já possui uma conta?</span>
+                <a href="{% url 'login' %}" class="link-highlight">Faça Login</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 Fernanda Doces - Qualidade gourmet direto para você.</p>
+        <div class="dev-info">
+            <span>Desenvolvido por Vinícius Roland</span>
+            <a href="https://wa.me/5532988366586?text=Olá%20Vinícius,%20vi%20o%20projeto%20da%20Fernanda%20Doces%20e%20gostaria%20de%20falar%20sobre%20um%20sistema!" 
+            target="_blank" 
+            class="wa-dev-link">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Vinícius">
+            </a>
+        </div>
+    </footer>
+</body>
+</html>

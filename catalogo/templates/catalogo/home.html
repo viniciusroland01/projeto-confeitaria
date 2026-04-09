@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Fernanda Doces</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="{% url 'home' %}">Fernanda Doces</a>
+        </div>
+        
+        <div class="nav-links">
+            <a href="{% url 'ver_carrinho' %}" class="cart-link">
+                🛒 <span class="cart-badge">{{ request.session.carrinho|length|default:0 }}</span>
+            </a>
+            {% if user.is_authenticated %}
+                <div class="user-info">
+                    <span class="user-name">Olá, {{ user.username }}!</span>
+                    <span class="user-points">✨ {{ user.perfil.pontos }} pts</span>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout" title="Sair">🚪</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'cadastro' %}" class="btn-nav">Entrar</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Momentos mais Doces</h1>
+        <p>Artesanal, Regional e Inesquecível.</p>
+    </header>
+
+    <main class="vitrine-container">
+        {% for doce in doces %}
+        <div class="doce-card">
+            {% if doce.imagem %}
+                <img src="{{ doce.imagem.url }}" class="doce-image" alt="{{ doce.nome }}">
+            {% endif %}
+            <div class="doce-info">
+                <h3>{{ doce.nome }}</h3>
+                <span class="preco-tag">R$ {{ doce.preco }}</span>
+                
+                <form action="{% url 'adicionar_ao_carrinho' doce.id %}" method="POST" class="form-add-cart">
+                    {% csrf_token %}
+                    <input type="number" name="quantidade" value="1" min="1" class="input-qtd">
+                    <button type="submit" class="btn-comprar">+ Adicionar</button>
+                </form>
+                
+            </div>
+        </div>
+        {% endfor %}
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 Fernanda Doces - Qualidade gourmet direto para você.</p>
+        <div class="dev-info">
+            <span>Desenvolvido por Vinícius Roland</span>
+            <a href="https://wa.me/5532988366586?text=Olá%20Vinícius,%20vi%20o%20projeto%20da%20Fernanda%20Doces%20e%20gostaria%20de%20falar%20sobre%20um%20sistema!" 
+            target="_blank" 
+            class="wa-dev-link">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Vinícius">
+            </a>
+        </div>
+    </footer>
+
+    {% if request.session.carrinho|length > 0 %}
+        <a href="{% url 'ver_carrinho' %}" class="floating-cart">
+            Ir para o Carrinho 
+            <span class="floating-badge">{{ request.session.carrinho|length }}</span>
+        </a>
+    {% endif %}
+</body>
+</html>
