@@ -4,7 +4,7 @@ Este é um ecossistema completo para gestão de vendas de uma confeitaria, evolu
 
 ## 🚀 Diferenciais Técnicos (Backend)
 
-Diferente de catálogos comuns, este projeto implementa funcionalidades avançadas de backend:
+Funcionalidades :
 
 - **Sistema de Fidelidade:** O modelo de `Perfil` rastreia pontos acumulados por cada usuário (Lógica: 20 pts = 1 brinde), incentivando a retenção de clientes.
 - **Gestão de Catálogo:** Administração total via Django Admin, permitindo cadastrar, atualizar preços e controlar disponibilidade de produtos em tempo real.
