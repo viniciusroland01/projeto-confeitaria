@@ -1,58 +1,81 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <title>Criar Conta - Fernanda Doces</title>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="logo">
-            <a href="{% url 'home' %}">🍰 Fernanda Doces</a>
-        </div>
-    </nav>
 
-    <main class="login-wrapper">
-        <div class="login-card">
-            <h1 class="logo-font">Criar Conta</h1>
-            <p class="subtitle">Cadastre-se para saborear nossas delícias!</p>
+{% block title %}Cadastro - Fernanda Doces{% endblock %}
 
-            <form method="POST">
-                {% csrf_token %}
-                <div class="input-group">
-                    <label>Usuário</label>
-                    <input type="text" name="username" required>
-                </div>
-                <div class="input-group">
-                    <label>Senha</label>
-                    <input type="password" name="password" required>
-                </div>
-                <div class="input-group">
-                    <label>Confirmar Senha</label>
-                    <input type="password" name="password_confirm" required>
-                </div>
-                <button type="submit" class="btn-login">Finalizar Cadastro</button>
-            </form>
+{% block extra_css %}
+<style>
+    .login-wrapper {
+        background-color: #fff0f6;
+        padding: 50px 20px;
+    }
+</style>
+{% endblock %}
 
-            <div class="auth-footer">
-                <span>Já possui uma conta?</span>
-                <a href="{% url 'login' %}" class="link-highlight">Faça Login</a>
+{% block content %}
+<main class="vitrine-container" style="display: flex; justify-content: center; padding-top: 50px; padding-bottom: 50px;">
+    <div class="doce-card" style="max-width: 400px; width: 100%; padding: 30px; background: white;">
+        <h2 style="color: #d63384; text-align: center; margin-bottom: 20px;">Criar Sua Conta 🎉</h2>
+        
+        <form method="POST" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div style="background: #fee; color: #c00; padding: 12px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #c00;">
+                    {% for error in form.non_field_errors %}
+                        <p style="margin: 0;">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Campo Usuário Manual -->
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; color: #555; margin-bottom: 5px; font-weight: 600;">Usuário</label>
+                <input type="text" name="username" required class="input-form" style="width: 100%; padding: 12px; border: 2px solid #fce4ec; border-radius: 10px; outline: none; transition: 0.3s; font-family: 'Poppins', sans-serif;" placeholder="Escolha um nome de usuário">
+                {% if form.username.errors %}
+                    <small style="color: #d32f2f;">{{ form.username.errors.0 }}</small>
+                {% endif %}
             </div>
-        </div>
-    </main>
 
-    <footer class="main-footer">
-        <p>&copy; 2026 Fernanda Doces - Qualidade gourmet direto para você.</p>
-        <div class="dev-info">
-            <span>Desenvolvido por Vinícius Roland</span>
-            <a href="https://wa.me/5532988366586?text=Olá%20Vinícius,%20vi%20o%20projeto%20da%20Fernanda%20Doces%20e%20gostaria%20de%20falar%20sobre%20um%20sistema!" 
-            target="_blank" 
-            class="wa-dev-link">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Vinícius">
+            <!-- Campo Senha Manual -->
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; color: #555; margin-bottom: 5px; font-weight: 600;">Senha</label>
+                <input type="password" name="password" required class="input-form" style="width: 100%; padding: 12px; border: 2px solid #fce4ec; border-radius: 10px; outline: none; transition: 0.3s; font-family: 'Poppins', sans-serif;" placeholder="Digite sua senha">
+                {% if form.password.errors %}
+                    <small style="color: #d32f2f;">{{ form.password.errors.0 }}</small>
+                {% endif %}
+            </div>
+
+            <!-- Campo Confirmar Senha Manual -->
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; color: #555; margin-bottom: 5px; font-weight: 600;">Confirmar Senha</label>
+                <input type="password" name="password_confirm" required class="input-form" style="width: 100%; padding: 12px; border: 2px solid #fce4ec; border-radius: 10px; outline: none; transition: 0.3s; font-family: 'Poppins', sans-serif;" placeholder="Confirme sua senha">
+            </div>
+
+            <!-- Campo Telefone Manual -->
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; color: #555; margin-bottom: 5px; font-weight: 600;">Telefone (com WhatsApp - opcional)</label>
+                <input type="tel" name="telefone" class="input-form" style="width: 100%; padding: 12px; border: 2px solid #fce4ec; border-radius: 10px; outline: none; transition: 0.3s; font-family: 'Poppins', sans-serif;" placeholder="(32) 98836-6586">
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div style="background: #fee; color: #c00; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #c00;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <button type="submit" class="btn-comprar" style="width: 100%; margin-top: 10px; border: none; cursor: pointer; font-family: 'Poppins', sans-serif;">
+                ✨ Cadastrar e Entrar
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'login' %}" style="color: #d63384; text-decoration: none; font-size: 0.9rem; font-weight: 600;">
+                Já tem uma conta? Faça login aqui
             </a>
         </div>
-    </footer>
-</body>
-</html>
+    </div>
+</main>
+{% endblock %}

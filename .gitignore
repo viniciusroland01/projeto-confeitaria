@@ -1,0 +1,51 @@
+# Ambiente Virtual
+venv/
+env/
+ENV/
+.venv
+
+# Dependências Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Banco de Dados
+db.sqlite3
+*.db
+
+# Django
+*.log
+local_settings.py
+/staticfiles/
+/media/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Variáveis de Ambiente
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporários
+*.tmp
+*.bak
+.coverage
+htmlcov/
+
+# Node (se usar frontend toolkit)
+node_modules/
+npm-debug.log

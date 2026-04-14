@@ -1,0 +1,75 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fernanda Doces - Artesanal, Regional e Inesquecível">
+    <meta name="theme-color" content="#ad1457">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+    
+    <title>{% block title %}Fernanda Doces{% endblock %}</title>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="{% url 'home' %}">🍰 Fernanda Doces</a>
+        </div>
+        
+        <div class="nav-links">
+            <a href="{% url 'ver_carrinho' %}" class="cart-link" title="Ver carrinho">
+                🛒 <span class="cart-badge">{{ request.session.carrinho|length|default:0 }}</span>
+            </a>
+            {% if user.is_authenticated %}
+                <div class="user-info">
+                    <span class="user-name">Olá, {{ user.username }}!</span>
+                    {% if user.perfil %}
+                        <span class="user-points" title="Pontos de fidelidade">✨ {{ user.perfil.pontos }} pts</span>
+                    {% endif %}
+                    <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout" title="Sair">🚪</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'cadastro' %}" class="btn-nav">Entrar</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- MENSAGENS DO DJANGO -->
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <p>&copy; 2026 Fernanda Doces - Qualidade gourmet direto para você.</p>
+        <div class="dev-info">
+            <span>Desenvolvido por Vinícius Roland</span>
+            <a href="https://wa.me/5532988366586?text=Olá%20Vinícius,%20vi%20o%20projeto%20da%20Fernanda%20Doces%20e%20gostaria%20de%20falar%20sobre%20um%20sistema!" 
+               target="_blank" 
+               class="wa-dev-link"
+               title="Contato via WhatsApp">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+            </a>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

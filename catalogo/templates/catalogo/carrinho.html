@@ -1,90 +1,67 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Carrinho | Fernanda Doces</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="logo">
-            <a href="{% url 'home' %}">🍰 Fernanda Doces</a>
-        </div>
-    </nav>
 
-    <main class="carrinho-container">
-        <div class="login-card" style="max-width: 100%;">
-            <h2 class="carrinho-title">Seu Carrinho de Delícias</h2>
+{% block title %}Carrinho - Fernanda Doces{% endblock %}
+
+{% block content %}
+<main class="carrinho-container">
+    <div class="login-card" style="max-width: 100%;">
+        <h2 class="carrinho-title">Seu Carrinho de Delícias</h2>
+        
+        {% if itens %}
+            <div class="table-responsive">
+                <table class="carrinho-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;">Produto</th>
+                            <th>Quantidade</th>
+                            <th>Preço Unit.</th>
+                            <th>Subtotal</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in itens %}
+                        <tr>
+                            <td class="item-nome" style="text-align: left;">{{ item.doce.nome }}</td>
+                            <td>
+                                <div class="qtd-control">
+                                    <a href="{% url 'remover_do_carrinho' item.doce.id %}" class="btn-qtd minus" title="Remover 1 unidade">−</a>
+                                    <span class="qtd-numero">{{ item.quantidade }}</span>
+                                    <a href="{% url 'adicionar_ao_carrinho' item.doce.id %}" class="btn-qtd plus" title="Adicionar 1 unidade">+</a>
+                                </div>
+                            </td>
+                            <td class="item-preco">R$ {{ item.doce.preco }}</td>
+                            <td class="item-subtotal">R$ {{ item.subtotal }}</td>
+                            <td>
+                                <a href="{% url 'excluir_item' item.doce.id %}" class="btn-remover" title="Remover do carrinho">Remover</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             
-            {% if itens %}
-                <div class="table-responsive">
-                    <table class="carrinho-table">
-                        <thead>
-                            <tr>
-                                <th style="text-align: left;">Produto</th>
-                                <th>Quantidade</th>
-                                <th>Preço Unit.</th>
-                                <th>Subtotal</th>
-                                <th>Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in itens %}
-                            <tr>
-                                <td class="item-nome" style="text-align: left;">{{ item.doce.nome }}</td>
-                                <td>
-                                    <div class="qtd-control">
-                                        <a href="{% url 'remover_do_carrinho' item.doce.id %}" class="btn-qtd minus">−</a>
-                                        <span class="qtd-numero">{{ item.quantidade }}</span>
-                                        <a href="{% url 'adicionar_ao_carrinho' item.doce.id %}" class="btn-qtd plus">+</a>
-                                    </div>
-                                </td>
-                                <td class="item-preco">R$ {{ item.doce.preco }}</td>
-                                <td class="item-subtotal">R$ {{ item.subtotal }}</td>
-                                <td>
-                                    <a href="{% url 'excluir_item' item.doce.id %}" class="btn-remover">Remover</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            <div class="carrinho-resumo">
+                <span class="item-preco">Resumo do pedido:</span>
+                <h3 class="resumo-total">Total: R$ {{ total }}</h3>
                 
-                <div class="carrinho-resumo">
-                    <span class="item-preco">Resumo do pedido:</span>
-                    <h3 class="resumo-total">Total: R$ {{ total }}</h3>
-                    
-                    {% if user.is_authenticated %}
-                        <p class="pontos-aviso">✨ Com esta compra você ganhará pontos de fidelidade!</p>
-                    {% endif %}
+                {% if user.is_authenticated %}
+                    <p class="pontos-aviso">✨ Com esta compra você ganhará pontos de fidelidade!</p>
+                {% endif %}
 
-                    <div class="resumo-acoes">
-                        <a href="{% url 'home' %}" class="link-voltar">← Continuar Comprando</a>
-                        <a href="{% url 'finalizar_pedido' %}" class="btn-finalizar">✅ Finalizar via WhatsApp</a>
-                    </div>
+                <div class="resumo-acoes">
+                    <a href="{% url 'home' %}" class="link-voltar">← Continuar Comprando</a>
+                    <a href="{% url 'finalizar_pedido' %}" class="btn-finalizar">✅ Finalizar via WhatsApp</a>
                 </div>
-            {% else %}
-                <div class="carrinho-vazio">
-                    <div class="carrinho-vazio-icone">🛒</div>
-                    <p class="subtitle">Seu carrinho ainda está vazio. Que tal escolher algo doce hoje?</p>
-                    <a href="{% url 'home' %}" class="btn-nav">Ver Vitrine de Doces</a>
-                </div>
-            {% endif %}
-        </div>
-    </main>
-
-    <footer class="main-footer">
-        <p>&copy; 2026 Fernanda Doces - Qualidade gourmet para você.</p>
-        <div class="dev-info">
-            <span>Desenvolvido por Vinícius Roland</span>
-            <a href="https://wa.me/5532988366586?text=Olá%20Vinícius,%20vi%20o%20projeto%20da%20Fernanda%20Doces%20e%20gostaria%20de%20falar%20sobre%20um%20sistema!" 
-            target="_blank" 
-            class="wa-dev-link">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Vinícius">
-            </a>
-        </div>
-    </footer>
-</body>
-</html>
+            </div>
+        {% else %}
+            <div class="carrinho-vazio">
+                <div class="carrinho-vazio-icone">🛒</div>
+                <p class="subtitle">Seu carrinho ainda está vazio. Que tal escolher algo doce hoje?</p>
+                <a href="{% url 'home' %}" class="btn-nav">Ver Vitrine de Doces</a>
+            </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
