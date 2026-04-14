@@ -88,7 +88,7 @@ def finalizar_pedido(request):
     if not carrinho_sessao:
         return redirect('home')
     
-    texto = "🍰 *NOVO PEDIDO - FERNANDA DOCES* 🍰\n\n"
+    texto = "📦 NOVO PEDIDO - FERNANDA DOCES 📦\n\n"
     total = 0
     itens_formatados = ""
 
@@ -98,22 +98,21 @@ def finalizar_pedido(request):
             quantidade = int(qtd)
             subtotal = doce.preco * quantidade
             total += subtotal
-            itens_formatados += f"▪️ {quantidade}x {doce.nome} - R$ {subtotal:.2f}\n"
+            itens_formatados += f"🧁 {quantidade}x {doce.nome} - R$ {subtotal:.2f}\n"
         except (Doce.DoesNotExist, ValueError):
             continue 
 
     texto += itens_formatados
-    texto += f"\n💰 *TOTAL DO PEDIDO: R$ {total:.2f}*"
+    texto += f"\n💵 TOTAL DO PEDIDO: R$ {total:.2f}"
     texto += f"\n--------------------------\n"
 
     # Identificação do Cliente (Sem alteração de pontos automática)
     if request.user.is_authenticated:
-        texto += f"👤 *Cliente:* {request.user.username}\n"
+        texto += f"👤 Cliente: {request.user.username}\n"
         if hasattr(request.user, 'perfil'):
-            texto += f"📊 *Saldo Atual:* {request.user.perfil.pontos} pts\n"
-        texto += "\n*(Favor validar os pontos deste pedido no sistema)*"
+            texto += f"⭐ Saldo Atual: {request.user.perfil.pontos} pts\n"
     else:
-        texto += "👤 *Cliente:* Visitante"
+        texto += "👤 Cliente: Visitante"
 
     # Limpeza do carrinho após gerar a mensagem
     request.session['carrinho'] = {}
